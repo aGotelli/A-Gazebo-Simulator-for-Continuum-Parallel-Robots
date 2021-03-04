@@ -1,3 +1,6 @@
 [submodule "Federico's_files/ContinuumRobotExamples"]
 	path = Federico's_files/ContinuumRobotExamples
 	url = https://github.com/JohnDTill/ContinuumRobotExamples.git
+[submodule "Previous_works/ContinuumRobotExamples"]
+	path = Previous_works/ContinuumRobotExamples
+	url = https://github.com/JohnDTill/ContinuumRobotExamples.git
