@@ -1,0 +1,16 @@
+*.aux
+*.bbl
+*.blg
+*.log
+*.nav
+*.out
+*.snm
+*.synctex
+*.toc
+*.tmp
+*.pro.user*
+*.blend1
+build*
+temp/
+output/
+*.dat
