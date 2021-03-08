@@ -19,7 +19,7 @@ loads.distribmom = 0; % distributed torque
 N = 100; % size of output data
 
 %% Input EE position
-pos_end = [0.3;0.7]; % end effector position
+pos_end = [0.0;0.8]; % end effector position
 
 %% Solution
 val = InverseShootingRFRFR(params,loads,pos_end,N);

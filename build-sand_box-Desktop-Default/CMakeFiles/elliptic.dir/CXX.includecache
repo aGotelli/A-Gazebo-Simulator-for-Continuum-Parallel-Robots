@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/andrea/Desktop/A-Gazebo-Simulator-for-Continuum-Parallel-Robots/sand_box/elliptic_functions.cpp
+iostream
+-
+fstream
+-
+cmath
+-
+boost/array.hpp
+-
+boost/numeric/odeint/config.hpp
+-
+boost/numeric/odeint.hpp
+-
+boost/numeric/odeint/stepper/bulirsch_stoer.hpp
+-
+boost/numeric/odeint/stepper/bulirsch_stoer_dense_out.hpp
+-
+
