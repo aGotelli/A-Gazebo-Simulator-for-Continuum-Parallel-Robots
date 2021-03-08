@@ -45,7 +45,7 @@ const DiagonalMatrix<double, 3> Kse = DiagonalMatrix<double, 3>(G*A,G*A,E*A);
 const DiagonalMatrix<double, 3> Kbt = DiagonalMatrix<double, 3>(E*I,E*I,G*J);
 const Vector3d F = Vector3d::Zero();
 const Vector3d M = Vector3d::Zero();
-const Vector3d pE(0.0, 0.3, 0.6);
+const Vector3d pE(0.0, 0.3, 0.7);
 const Matrix3d RE = DiagonalMatrix<double, 3>(1, 1, 1);
 const double alpha2 = 120*pi/180 - alpha1; //minor angle of the hole pattern
 
@@ -135,7 +135,9 @@ VectorXd shootingFunction(VectorXd guess)
 
     //  Compose the residual vector;
     //residual << distal_error, check_closure, res_force, Y1(17), Y2(17);
-    residual << distal_error, check_closure, res_force, mL1.z(), mL2.z();
+    //residual << distal_error, check_closure, res_force, mL1.z(), mL2.z();
+    residual << distal_error, check_closure, res_force, mL1.x(), mL2.x();
+
 
     return residual;
 }
