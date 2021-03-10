@@ -5,13 +5,6 @@
 #include <Eigen/Geometry>
 #include <rod_ivp_gazebo/shape_publisher.h>
 
-
-#include <boost/array.hpp>
-#include <boost/numeric/odeint/config.hpp>
-#include <boost/numeric/odeint.hpp>
-#include <boost/numeric/odeint/stepper/bulirsch_stoer.hpp>
-#include <boost/numeric/odeint/stepper/bulirsch_stoer_dense_out.hpp>
-
 namespace soft_body_demo
 {
 

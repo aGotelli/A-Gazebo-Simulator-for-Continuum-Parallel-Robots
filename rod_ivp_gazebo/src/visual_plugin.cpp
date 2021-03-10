@@ -59,7 +59,6 @@ void RodVisualPlugin::Update()
   for(int i= 0; i< points; i++)
     lines->SetPoint(i, scale*Vector3d(msg.x[i],msg.y[i],msg.z[i]));
   lines->SetPoint(points, scale*Vector3d(msg.x[points-1],msg.y[points-1],msg.z[points-1]));
-  lines->SetPoint(points+1, scale*Vector3d(msg.x[points-1],msg.y[points-1],msg.z[points-1]));
   lines->Update();
 
 }

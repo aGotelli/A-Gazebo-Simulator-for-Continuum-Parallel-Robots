@@ -11,8 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_msgs
 )
 
-find_package(Boost REQUIRED COMPONENTS system)
-
 find_package(Eigen3)
 if(NOT EIGEN3_FOUND)
   # Fallback to cmake_modules
