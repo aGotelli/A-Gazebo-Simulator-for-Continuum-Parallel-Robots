@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <arg name="enable_physics_plugin" default="false"/>
+    
+    <!--  Physics params put he so they are forwarded to plugin and external node -->
+    <arg name="fxy" default="10"/>
+    <arg name="fz" default="50"/>
+    <arg name="mz" default="0.1"/>
+    <arg name="damping" default="0.5"/>
+    <arg name="length" default="1"/>
+    
+    <!-- Create robot description -->
+    <param name="robot_description" command="$(find xacro)/xacro $(find rod_ivp_gazebo)/launch/mass_spring.sdf.xacro
+           fxy:=$(arg fxy) fz:=$(arg fz) mz:=$(arg mz) damping:=$(arg damping) length:=$(arg length) enable_physics_plugin:=$(arg enable_physics_plugin)"/>
+    
+    <!-- spawn model inside Gazebo -->
+    <node name="spawner" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -model mass_spring -param robot_description -x 0. -y 0 -z 0.05 -R 0 -P 0 -Y 0"/>
+    
+    <node name="rod_ivp_physics" pkg="rod_ivp_gazebo" type="physics_node" output="screen" respawn = "true" unless="$(arg enable_physics_plugin)">
+        <param name="fxy" value="$(arg fxy)"/>
+        <param name="fz" value="$(arg fz)"/>
+        <param name="mz" value="$(arg mz)"/>
+        <param name="damping" value="$(arg damping)"/>
+        <param name="length" value="$(arg length)"/>
+    </node>
+</launch>
