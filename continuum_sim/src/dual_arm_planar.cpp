@@ -43,7 +43,7 @@ const double I = pi*pow(rad,4)/4;
 const double J = 2*I;
 const DiagonalMatrix<double, 3> Kse = DiagonalMatrix<double, 3>(G*A,G*A,E*A);
 const DiagonalMatrix<double, 3> Kbt = DiagonalMatrix<double, 3>(E*I,E*I,G*J);
-const Vector3d F = Vector3d::Zero();
+const Vector3d F(0.0, 0.0, 2);// = Vector3d::Zero();
 const Vector3d M = Vector3d::Zero();
 const Vector3d pE(0.0, 0.3, 0.7);
 const Matrix3d RE = DiagonalMatrix<double, 3>(1, 1, 1);
@@ -75,7 +75,6 @@ VectorXd cosseratRodOde(VectorXd y){
 
     return y_s;
 }
-
 
 
 static MatrixXd Y1;

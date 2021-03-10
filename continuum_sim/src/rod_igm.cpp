@@ -111,7 +111,8 @@ int main(int argc, char **argv)
           0,   sin(th),  cos(th);
   Vector3d n0;// = Vector3d::UnitY();
   n0 << 0, 0, 0;
-  Vector3d m0 = Vector3d::Zero();
+  Vector3d m0; //= Vector3d::Zero();
+  m0 << 0.0, 0.0, 0.5;
   double ds = 0.005;
 
   VectorXd y0(18);
@@ -141,3 +142,5 @@ int main(int argc, char **argv)
 
   ROS_INFO("Hello world!");
 }
+
+
