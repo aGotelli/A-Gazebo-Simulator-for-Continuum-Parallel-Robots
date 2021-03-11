@@ -45,7 +45,7 @@ target_include_directories(rod_bvp_physics PRIVATE
 target_link_libraries(rod_bvp_physics rod_bvp_shape)
 
 # physics as an external node
-add_executable(physics_node src/physics_node.cpp)
-target_include_directories(physics_node PRIVATE
+add_executable(rod_bvp_physics_node src/physics_node.cpp)
+target_include_directories(rod_bvp_physics_node PRIVATE
                     include ${ZMQ_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
-target_link_libraries(physics_node rod_bvp_physics ${catkin_LIBRARIES})
+target_link_libraries(rod_bvp_physics_node rod_bvp_physics ${catkin_LIBRARIES})
