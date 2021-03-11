@@ -78,7 +78,9 @@ std::cout << "SpringPhysics::initParams" << std::endl;
 Wrench RodIVPPhysics::update(const State &state)
 {
   //Set initial conditions
-  Vector3d p0 = Vector3d::Zero();
+
+  auto pose = state.pose.inverse(); //Vector3d::Zero();
+  Vector3d p0 = pose.translation();
   Matrix3d R0 = Matrix3d::Identity();
 
   Vector3d n0;// = Vector3d::UnitY();
