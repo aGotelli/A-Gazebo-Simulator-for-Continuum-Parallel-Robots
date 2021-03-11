@@ -103,7 +103,8 @@ int main (int argc, char** argv)
   while(ros::ok())
   {
     // get -> compute -> apply wrench
-    io.applyWrench(model.update(io.getState()));
+    //io.applyWrench(model.update(io.getState()));
+    model.update(io.getState());
 
     ros::spinOnce();
     rate.sleep();

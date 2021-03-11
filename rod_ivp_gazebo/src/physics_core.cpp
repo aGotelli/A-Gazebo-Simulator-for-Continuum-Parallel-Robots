@@ -10,7 +10,7 @@ const double E = 200e9;
 const double G = 80e9;
 const double rad = 0.001;
 const double rho = 8000;
-const Vector3d g = 9.81*Vector3d::UnitX();
+const Vector3d g = Vector3d::UnitZ();
 const double L = 0.5;
 
 //Dependent parameter calculations

@@ -17,7 +17,7 @@ const double E = 200e9;
 const double G = 80e9;
 const double rad = 0.001;
 const double rho = 8000;
-const Vector3d g = 9.81*Vector3d::UnitX();
+const Vector3d g = Vector3d::Zero();
 const double L = 0.5;
 
 //Dependent parameter calculations
@@ -139,6 +139,12 @@ Wrench RodIVPPhysics::update(const State &state)
 
   //Solve with shooting method
   VectorXd wrench_soln = solveLevenbergMarquardt<shootingFunction>(guess_);
+
+  for (int i = 0;i<3;i++) {
+    //if(Y.row(i).hasNaN())
+      Y.row(i) = VectorXd::Zero(Y.cols()-1);
+  }
+
 
   for (unsigned int i=0;i<100;i++) {
     shape.x[i] = Y(0,i);
