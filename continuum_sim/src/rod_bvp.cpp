@@ -51,18 +51,31 @@ VectorXd cosseratRodOde(VectorXd y){
 const Vector3d p0(0.0, 0.0, 0.0);// = Vector3d::Zero();
 const Matrix3d R0 = Matrix3d::Identity();
 const double theta = 0;
-const Vector3d pL(0.0, -0.05, L-0.1); // = Vector3d(0, -0.1*L, 0.8*L);
+//const Vector3d pL(0.0, -0.05, L-0.1); // = Vector3d(0, -0.1*L, 0.8*L);
+const Vector3d pL(-0.05, L-0.1, 0.0); // = Vector3d(0, -0.1*L, 0.8*L);
 const Matrix3d RL = Matrix3d::Identity();
 
 static MatrixXd Y; //Declare Y global for shooting and visualization
 VectorXd shootingFunction(VectorXd guess){
     VectorXd y0(18);
     //y0 << p0, Map<VectorXd>(Matrix3d(R0).data(), 9), guess;
+//    double th = guess(0);
+//    Matrix3d R;
+//    R <<  1,     0   ,     0    ,
+//          0,  cos(th),  -sin(th),
+//          0,  sin(th),  cos(th) ;
+    double roll = -M_PI/2;
+    Matrix3d Rx;
+    Rx  <<  1,     0,         0,
+            0,   cos(roll), -sin(roll),
+            0,   sin(roll),  cos(roll);
     double th = guess(0);
-    Matrix3d R;
-    R <<  1,     0   ,     0    ,
-          0,  cos(th),  -sin(th),
-          0,  sin(th),  cos(th) ;
+    Matrix3d Rz;
+    Rz  <<  cos(th), -sin(th),  0,
+            sin(th),  cos(th),  0,
+              0,         0,     1;
+    Matrix3d R = Rz*Rx;
+
     Vector3d n;
     n << guess(1), guess(2), guess(3);
     Vector3d m;
@@ -102,7 +115,7 @@ int main(int, char**){
     VectorXd wrench_soln = solveLevenbergMarquardt<shootingFunction>(init_guess);
 
     #ifdef QT_CORE_LIB
-    plot(Y.row(1), Y.row(2), "Cosserat Rod BVP Solution", "y (m)", "z (m)");
+    //plot(Y.row(1), Y.row(2), "Cosserat Rod BVP Solution", "y (m)", "z (m)");
     plot(Y.row(0), Y.row(1), "Cosserat Rod BVP Solution", "x (m)", "y (m)");
     #endif
 
