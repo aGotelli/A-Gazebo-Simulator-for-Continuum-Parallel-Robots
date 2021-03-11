@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<sdf version="1.4" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<model name="mass_spring">
+
+  <xacro:property name="PI" value="3.1415926535897931"/>
+
+  <!-- end-effector properties -->
+  <xacro:property name="mass" value="1"/>
+  <xacro:property name="x" value=".1"/>
+  <xacro:property name="y" value=".1"/>
+  <xacro:property name="z" value=".1"/>
+
+<!-- physics parameters -->
+<xacro:arg name="enable_physics_plugin" default="true"/>
+<xacro:arg name="fxy" default="10"/>
+<xacro:arg name="fz" default="50"/>
+<xacro:arg name="mz" default="0.1"/>
+<xacro:arg name="damping" default="0.1"/>
+<xacro:arg name="length" default="1"/>
+
+<!-- Model plugin for physics -->
+  <xacro:if value="$(arg enable_physics_plugin)">
+    <plugin name="soft_body_physics_plugin" filename="libsoft_body_physics_plugin.so">
+        <fxy>$(arg fxy)</fxy>
+        <fz>$(arg fz)</fz>
+        <mz>$(arg mz)</mz>
+        <damping>$(arg damping)</damping>
+        <length>$(arg length)</length>
+        <attach_point>0 0 0</attach_point>
+    </plugin>
+  </xacro:if>
+
+    <link name="base_link"/>
+
+    <link name="ee">
+       <visual name="box">
+            <plugin name="rod_bvp_visual_plugin" filename="librod_bvp_visual_plugin.so">
+                <radius>0.05</radius>
+                <scale>10</scale>
+            </plugin>
+        <geometry>
+        <box><size>${x} ${y} ${z}</size></box>
+        </geometry>
+        </visual>
+
+    <collision name="base">
+        <geometry>
+            <box><size>${x} ${y} ${z}</size></box>
+        </geometry>
+    </collision>
+    <inertial>
+        <mass>${mass}</mass>
+        <inertia>
+            <ixx>${mass*(y**2 + z**2)/12}</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>${mass*(x**2 + z**2)/12}</iyy>
+            <iyz>0</iyz>
+            <izz>${mass*(y**2 + x**2)/12}</izz>
+        </inertia>
+    </inertial>
+  </link>
+
+    <joint name="root" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <parent>base_link</parent>
+        <child>ee</child>
+    </joint>
+
+</model>
+</sdf>

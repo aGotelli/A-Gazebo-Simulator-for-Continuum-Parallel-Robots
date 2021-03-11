@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <arg name="external_physics" default="true"/>
+    
+    
+    <node name="spawn" pkg="soft_body_demo" type="respawn" output="screen">
+        <!-- model name -->
+        <param name="name" value="mass_spring"/>
+        <!-- model file (urdf / xacro / sdf) -->
+        <param name="model" value="$(find soft_body_demo)/launch/mass_spring.sdf.xacro"/>
+        <!-- list of params for plugins to update
+                name = name of plugin inside model
+                value = pkg where this plugin is defined  -->
+        <param name="pose" value="-x 0.3 -z 1"/>
+        <param name="SpringVisualPlugin" value="soft_body_demo/soft_body_visual"/>
+        <param name="SpringModelPlugin" value="soft_body_demo/soft_body_physics"/>
+    </node>
+    
+    
+    
+    
+</launch>
