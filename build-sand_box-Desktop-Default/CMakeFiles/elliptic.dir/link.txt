@@ -1,1 +1,0 @@
-/usr/bin/g++    -rdynamic CMakeFiles/elliptic.dir/elliptic_functions.cpp.o  -o elliptic 
