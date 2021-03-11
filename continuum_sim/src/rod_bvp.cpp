@@ -58,12 +58,7 @@ const Matrix3d RL = Matrix3d::Identity();
 static MatrixXd Y; //Declare Y global for shooting and visualization
 VectorXd shootingFunction(VectorXd guess){
     VectorXd y0(18);
-    //y0 << p0, Map<VectorXd>(Matrix3d(R0).data(), 9), guess;
-//    double th = guess(0);
-//    Matrix3d R;
-//    R <<  1,     0   ,     0    ,
-//          0,  cos(th),  -sin(th),
-//          0,  sin(th),  cos(th) ;
+
     double roll = -M_PI/2;
     Matrix3d Rx;
     Rx  <<  1,     0,         0,
@@ -103,10 +98,7 @@ int main(int, char**){
     n << 0.0, 0.0, 0.0;
     Vector3d m;
     m << 0.0, 0.0, 0.0;
-    VectorXd R_vec(9);
-    R_vec = Map<VectorXd>(Matrix3d(R0).data(), 9);
-//    VectorXd init_guess(15);
-//    init_guess << R_vec, n, m;
+
     double th = 0.0;
     VectorXd init_guess(7);
     init_guess << th, n, m;
