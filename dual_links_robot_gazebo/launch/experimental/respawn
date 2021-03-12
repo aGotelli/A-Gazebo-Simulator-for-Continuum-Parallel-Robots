@@ -1,0 +1,144 @@
+#!/usr/bin/python3
+'''
+Spawn or respawn a model in Gazebo with up-to-date plugins
+'''
+
+import sys
+import rospy
+from rospkg import RosPack
+from gazebo_msgs.srv import GetModelState
+import xacro
+import random
+import string
+import os
+import shutil
+from subprocess import check_output, run
+
+if '-h' in sys.argv:
+    usage = '''(re)spawner node for models with changing (being developped) Gazebo plugins
+
+Private params to set:
+- mandatory
+    - model: absolute path to model file
+    - name: model name in Gazebo
+- optional
+    - format: urdf or sdf if it is not obvious from the file extension
+    - xacro_args: full string of args as in "arg1:=value1 arg2:=value2"
+    - pose: pose of the model as -x 0 -y 0 -z 0 -R 0 -P 0 -Y 0
+- plugins
+    Any other private param will be considered as a plugin.
+    It should be defined as name = <class name> and value = <package name>/<library name>
+    '''
+    print(usage)
+    sys.exit(0)
+
+rospy.init_node('model_respawner')
+
+if not rospy.has_param('~model') or not rospy.has_param('~name'):
+    rospy.logerr('Give a model file as ~model param')
+    sys.exit(0)
+    
+ns = rospy.get_namespace()    
+if ns == '/':
+    ns = ''
+ns_priv = rospy.get_name()
+not_plugins = ('model', 'mappings','pose','name')
+
+model = rospy.get_param('~model')
+model_name = rospy.get_param('~name')
+
+description_format = ''
+for df in ('.sdf','.urdf'):
+    if model.endswith(df) or model.endswith(df+'.xacro'):
+        description_format = df[1:]
+if not description_format:
+    rospy.logerr('Cannot guess format of {}. Give format as ~format param'.format(model))
+
+# xacro args
+mappings = {}
+if rospy.has_param('~xacro_args'):
+    for arg in rospy.get_param('~xacro_args').split():
+        key,val = arg.split(':=')
+        mappings[key] = val
+        
+# plugin as {pkg: [plugins]}
+plugins = {}
+for param in rospy.get_param_names():
+    if param.startswith(ns_priv):
+        class_name = param[len(ns_priv)+1:]
+        if class_name not in not_plugins:
+            pkg,lib = rospy.get_param(param).split('/')
+            if pkg in plugins:
+                plugins[pkg][lib] = class_name
+            else:
+                plugins[pkg] = {lib: class_name}
+
+# process with passed args
+xml = xacro.process_file(model, mappings=mappings).toxml()
+
+'''
+# playing with library does not seem to work for now...
+# update plugin paths to random names
+letters = string.ascii_letters
+this_id = ''.join(random.choice(letters) for i in range(10))
+suffix = '_respawn' + this_id
+for names in plugins.values():
+    for name in names:
+        xml = xml.replace('lib{}.so'.format(name), 'lib{}{}.so'.format(name, suffix))
+
+# find plugins
+rospack = RosPack()
+for pkg in plugins:
+    path = rospack.get_path(pkg)
+    # find devel folder
+    while '.catkin_tools' not in os.listdir(path):
+        path = os.path.dirname(path)
+    path += '/devel/lib'
+    # find these files
+    for plugin in plugins[pkg]:
+        class_name = plugins[pkg][plugin]
+        plugin_file = '{}/lib{}.so'.format(path, plugin)
+        if os.path.lexists(plugin_file):
+            print(plugin_file + ' found')
+            real_path = os.path.realpath(plugin_file)
+            # remove all previous respawned plugins
+            for f in os.listdir(path):
+                if f.startswith('lib{}_respawn'.format(plugin)):
+                    os.remove(os.path.join(path, f))
+            run(['objcopy','--prefix-symbols={}_'.format(this_id), real_path, '{}/lib{}{}.so'.format(path, plugin, suffix)])
+
+            ## create this one
+            #shutil.copy(real_path, '{}/lib{}{}.so'.format(path, plugin, suffix))
+            ## also rename symbols
+            #symbols = check_output(['nm','-D',plugin_file]).decode('utf-8').splitlines() 
+            #symbols = [l.split()[2] for l in symbols if class_name in l]
+            ##print(symbols)
+            #print('Looking for {} in {}/lib{}{}.so'.format(class_name, path, plugin, suffix, ))
+            ## rename all symbols
+            #for symbol in symbols:
+            # TODO
+'''
+
+# parse pose
+pose = {'x': 0, 'y': 0, 'z': 0, 'R': 0, 'P': 0, 'Y': 0}
+pose_arg = rospy.get_param('~pose', '').split(' ')
+for axis in pose:
+    if '-'+axis in pose_arg:
+        pose[axis] = pose_arg[pose_arg.index('-'+axis)+1]
+        
+# check if model already exists
+get_model_state = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
+if get_model_state(model_name, 'world').success:
+    # remove it
+    from gazebo_msgs.srv import DeleteModel
+    rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)(model_name)
+
+# command-line spawner
+robot_description = ns + '/robot_description'
+rospy.set_param(robot_description, xml)
+
+gazebo_args = ' '.join('-{} {}'.format(axis, pose[axis]) for axis in pose)
+os.system('rosrun gazebo_ros spawn_model -{} -param {} -model {} {}'.format(description_format, 
+                                                                            robot_description, 
+                                                                            model_name, 
+                                                                            gazebo_args))
