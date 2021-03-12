@@ -7,8 +7,12 @@ namespace soft_body_demo
 ShapeListener::ShapeListener(std::chrono::milliseconds timeout) : timeout(timeout)
 {
   listener = std::thread([&](){listening_loop();});
-  msg.xc = msg.yc = {0,0,0,0};
-  msg.zc = {0,-1,0,0};
+  for(auto& x : msg.x)
+    x = 0.0;
+  for(auto& y : msg.y)
+    y = 0.0;
+  for(auto& z : msg.z)
+    z = 0.0;
 }
 
 ShapeListener::~ShapeListener()

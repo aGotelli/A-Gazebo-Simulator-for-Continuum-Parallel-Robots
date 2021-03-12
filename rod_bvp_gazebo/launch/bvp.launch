@@ -20,10 +20,8 @@
 
     <include file="$(find rod_bvp_gazebo)/launch/spawn_joint.launch">
         <arg name="joint_name" value="joint"/>
-        <!--
         <arg name="x" value="-0.05"/>
         <arg name="y" value="0.1"/>
-        -->
     </include>
 
     <node name="rod_bvp_solver" pkg="rod_bvp_gazebo" type="rod_bvp_physics_node" output="screen" respawn = "true" unless="$(arg enable_physics_plugin)">

@@ -132,15 +132,17 @@ double RodIVPPhysics::update(const State& distal_plate_state)
   //Solve with shooting method
   VectorXd wrench_soln = solveLevenbergMarquardt<shootingFunction>(init_guess);
 
-  if(!Y.row(0).hasNaN() && !Y.row(1).hasNaN() && !Y.row(2).hasNaN()) {
-    for (unsigned int i=0;i<100;i++) {
-      shape.x[i] = Y(0,i);
-      shape.y[i] = Y(1,i);
-      shape.z[i] = Y(2,i);
-    }
-
-    shape_publisher.publish(shape);
+  //  Copy the values in the shape message
+  //  The visual plugin works in local coordinates so we need to
+  //  use the inverse of the transformation (simply subtract the joint
+  //  position in the plane)
+  for (unsigned int i=0;i<100;i++) {
+    shape.x[i] = Y(0,i) - p0.x();
+    shape.y[i] = Y(1,i) - p0.y();
+    shape.z[i] = Y(2,i) - p0.z();
   }
+
+  shape_publisher.publish(shape);
 
   //  Take the last theta guessed
   return guess_(0);

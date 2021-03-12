@@ -25,7 +25,7 @@ inline double eval(const soft_body_demo::Coefs &coefs, double x)
 
 Vector3d getPoint(const soft_body_demo::ShapeMsg &msg, double t)
 {
-  return {eval(msg.xc, t), eval(msg.yc, t), eval(msg.zc, t)};
+  //return {eval(msg.xc, t), eval(msg.yc, t), eval(msg.zc, t)};
 }
 
 namespace gazebo
