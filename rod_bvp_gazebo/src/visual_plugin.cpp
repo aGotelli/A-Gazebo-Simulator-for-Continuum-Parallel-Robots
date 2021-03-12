@@ -35,7 +35,9 @@ void RodVisualPlugin::Load(rendering::VisualPtr parent, sdf::ElementPtr sdf)
 {
   std::cout << "Loading the visualization of the rod ivp" << std::endl;
   radius = read(sdf, "radius", 0.1);
-  scale = read(sdf, "scale", 1.0);
+  inv_scale.X(1./parent->Scale().X());
+  inv_scale.Y(1./parent->Scale().Y());
+  inv_scale.Z(1./parent->Scale().Z());
 
   visual = parent;
   lines = visual->CreateDynamicLine(rendering::RENDERING_LINE_STRIP);
@@ -57,8 +59,8 @@ void RodVisualPlugin::Update()
 
 
   for(int i= 0; i< points; i++)
-    lines->SetPoint(i, scale*Vector3d(msg.x[i],msg.y[i],msg.z[i]));
-  lines->SetPoint(points, scale*Vector3d(msg.x[points-1],msg.y[points-1],msg.z[points-1]));
+    lines->SetPoint(i, inv_scale*Vector3d(msg.x[i],msg.y[i],msg.z[i]));
+  lines->SetPoint(points, inv_scale*Vector3d(msg.x[points-1],msg.y[points-1],msg.z[points-1]));
   lines->Update();
 
 }

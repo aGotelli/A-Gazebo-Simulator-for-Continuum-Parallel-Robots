@@ -102,7 +102,7 @@ VectorXd shootingFunction(VectorXd guess){
 
 const Vector3d n0(0.0, 0.0, 0.0);
 const Vector3d m0(0.0, 0.0, 0.0);
-void RodIVPPhysics::initParams(double dt, double fxy, double fz, double mz, double damping, double length, const State &state)
+void RodIVPPhysics::initParams(double dt, double fxy, double fz, double mz, double damping, double length, const State &link_state)
 {
   std::cout << "SpringPhysics::initParams" << std::endl;
   this->fxy = fxy;
@@ -112,51 +112,39 @@ void RodIVPPhysics::initParams(double dt, double fxy, double fz, double mz, doub
   this->damping = damping;
   this->length = length;
 
-  //Set initial conditions
-  auto pose = state.pose.inverse();
-  p0 = pose.translation();
+  p0 = link_state.pose.translation();
   p0.z() = 0;
+
+}
+
+double RodIVPPhysics::update(const State& distal_plate_state)
+{
+
+  //Set initial conditions
+  pL = distal_plate_state.pose.translation();
+  pL.z() = 0.0;
 
   double th = 0.0;
   VectorXd init_guess(7);
 
   init_guess << th, n0, m0;
+
   //Solve with shooting method
   VectorXd wrench_soln = solveLevenbergMarquardt<shootingFunction>(init_guess);
 
-  std::cout << "Initialized the rod with initial guess" << std::endl;
+  if(!Y.row(0).hasNaN() && !Y.row(1).hasNaN() && !Y.row(2).hasNaN()) {
+    for (unsigned int i=0;i<100;i++) {
+      shape.x[i] = Y(0,i);
+      shape.y[i] = Y(1,i);
+      shape.z[i] = Y(2,i);
+    }
 
-
-}
-
-Wrench RodIVPPhysics::update(const State &state)
-{
-
-  //Set initial conditions
-  auto pose = state.pose.inverse();
-  p0 = pose.translation();
-  p0.z() = 0;
-
-  //Solve with shooting method
-  VectorXd wrench_soln = solveLevenbergMarquardt<shootingFunction>(guess_);
-
-  for (int i = 0;i<3;i++) {
-    //if(Y.row(i).hasNaN())
-      Y.row(i) = VectorXd::Zero(Y.cols()-1);
+    shape_publisher.publish(shape);
   }
 
-
-  for (unsigned int i=0;i<100;i++) {
-    shape.x[i] = Y(0,i);
-    shape.y[i] = Y(1,i);
-    shape.z[i] = Y(2,i);
-  }
-
-  shape_publisher.publish(shape);
-
-  return Wrench();
+  //  Take the last theta guessed
+  return guess_(0);
 
 }
-
 
 }

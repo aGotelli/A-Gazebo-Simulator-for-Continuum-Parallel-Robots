@@ -48,9 +48,9 @@ public:
 
   RodIVPPhysics() {}
 
-  void initParams(double dt, double fxy, double fz, double mz, double damping, double length, const State &state);
+  void initParams(double dt, double fxy, double fz, double mz, double damping, double length, const State &link_state);
 
-  Wrench update(const State &state);
+  double update(const State &distal_plate_state);
 
 
 

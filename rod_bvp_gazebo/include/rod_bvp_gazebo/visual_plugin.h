@@ -27,6 +27,7 @@ protected:
     rendering::DynamicLines* lines;
     int points = 100;
     double scale = 1.0;
+    Vector3d inv_scale;
 };
 GZ_REGISTER_VISUAL_PLUGIN(RodVisualPlugin)
 }

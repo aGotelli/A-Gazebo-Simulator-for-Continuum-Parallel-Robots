@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<sdf version="1.4" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<model name="joint">
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+
+    <!-- end-effector properties -->
+    <xacro:property name="mass" value="1"/>
+    <xacro:property name="x" value="0.05"/>
+    <xacro:property name="y" value="0.05"/>
+    <xacro:property name="z" value="0.1"/>
+
+
+    <link name="base_link"/>
+
+    <link name="joint">
+        <visual name="revolute_visual">
+            <plugin name="rod_bvp_visual_plugin" filename="librod_bvp_visual_plugin.so">
+                <radius>0.05</radius>
+            </plugin>
+            <geometry>
+                <cylinder>
+                    <length>${z}</length>
+                    <radius>${x/2}</radius>
+                </cylinder>
+            </geometry>
+        </visual>
+        <collision name="revolute_collision">
+            <geometry>
+                <cylinder>
+                    <length>${z}</length>
+                    <radius>${x/2}</radius>
+                </cylinder>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass>${mass}</mass>
+            <inertia>
+                <ixx>${mass*(3*(x/2)**2 + z**2)/12}</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>${mass*(3*(x/2)**2 + z**2)/12}</iyy>
+                <iyz>0</iyz>
+                <izz>${mass*((x/2)**2)/2}</izz>
+            </inertia>
+        </inertial>
+    </link>
+
+    <joint name="rev_joint" type="revolute">
+        <axis xyz="0 0 1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <parent>base_link</parent>
+        <child>joint</child>
+    </joint>
+
+</model>
+</sdf>

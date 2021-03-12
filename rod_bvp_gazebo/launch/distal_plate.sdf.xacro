@@ -1,46 +1,49 @@
 <?xml version="1.0"?>
 <sdf version="1.4" xmlns:xacro="http://www.ros.org/wiki/xacro">
-<model name="mass_spring">
+<model name="distal_plate">
 
-  <xacro:property name="PI" value="3.1415926535897931"/>
+    <xacro:property name="PI" value="3.1415926535897931"/>
 
-  <!-- end-effector properties -->
-  <xacro:property name="mass" value="1"/>
-  <xacro:property name="x" value=".1"/>
-  <xacro:property name="y" value=".1"/>
-  <xacro:property name="z" value=".1"/>
+    <!-- end-effector properties -->
+    <xacro:property name="mass" value="1"/>
+    <xacro:property name="x" value=".1"/>
+    <xacro:property name="y" value=".1"/>
+    <xacro:property name="z" value=".1"/>
 
 
 
     <link name="base_link2"/>
 
     <link name="distal_plate">
-       <visual name="box">
-        <geometry>
-            <box><size>${x} ${y} ${z}</size></box>
-        </geometry>
+        <visual name="box">
+            <geometry>
+                <box>
+                    <size>${x} ${y} ${z}</size>
+                </box>
+            </geometry>
         </visual>
-
-    <collision name="base">
-        <geometry>
-            <box><size>${x} ${y} ${z}</size></box>
-        </geometry>
-    </collision>
-    <inertial>
-        <mass>${mass}</mass>
-        <inertia>
-            <ixx>${mass*(y**2 + z**2)/12}</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>${mass*(x**2 + z**2)/12}</iyy>
-            <iyz>0</iyz>
-            <izz>${mass*(y**2 + x**2)/12}</izz>
-        </inertia>
-    </inertial>
-  </link>
+        <collision name="base">
+            <geometry>
+                <box>
+                    <size>${x} ${y} ${z}</size
+                ></box>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass>${mass}</mass>
+            <inertia>
+                <ixx>${mass*(y**2 + z**2)/12}</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>${mass*(x**2 + z**2)/12}</iyy>
+                <iyz>0</iyz>
+                <izz>${mass*(y**2 + x**2)/12}</izz>
+            </inertia>
+        </inertial>
+    </link>
 
     <joint name="root" type="fixed">
-        <origin xyz="0 0 0" rpy="${PI*0.5} 0 0"/>
+        <origin xyz="0 0 0" rpy="$0 0 0"/>
         <parent>base_link2</parent>
         <child>distal_plate</child>
     </joint>
