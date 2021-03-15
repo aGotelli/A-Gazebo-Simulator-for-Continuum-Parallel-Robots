@@ -1,5 +1,5 @@
-#ifndef SOFT_BODY_SHAPE_PUBLISHER_H
-#define SOFT_BODY_SHAPE_PUBLISHER_H
+#ifndef DUAL_LINKS_ROBOT_SHAPE_PUBLISHER_H
+#define DUAL_LINKS_ROBOT_SHAPE_PUBLISHER_H
 
 #include <dual_links_robot_gazebo/zmq.hpp>
 #include <dual_links_robot_gazebo/shape_msg.h>
@@ -24,4 +24,4 @@ private:
 };
 }
 
-#endif // SOFT_BODY_SHAPE_PUBLISHER_H
+#endif // DUAL_LINKS_ROBOT_SHAPE_PUBLISHER_H

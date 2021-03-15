@@ -3,7 +3,7 @@
     
     
 
-    <arg name="joint_number" default="0"/>
+    <arg name="joint_number" default="1"/>
     <arg name="x" default="0.0"/>
     <arg name="y" default="0.0"/>
     <arg name="z" default="0.0"/>
@@ -15,7 +15,7 @@
 
 
 <group ns="joint$(arg joint_number)">
-    <param name="robot_description" command="$(find xacro)/xacro $(find dual_links_robot_gazebo)/launch/joint.sdf.xacro joint_number:=$(arg joint_number)"/>
+    <param name="robot_description" command="$(find xacro)/xacro $(find dual_links_robot_gazebo)/launch/joint1.sdf.xacro joint_number:=$(arg joint_number)"/>
     <node name="spawner_joint" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -model joint$(arg joint_number) -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R)  -P $(arg P) -Y $(arg Y)"/>
 </group>
 

@@ -10,16 +10,17 @@
     <xacro:property name="y" value="0.05"/>
     <xacro:property name="z" value="0.1"/>
 
-
-
+    <xacro:arg name="joint_number"  default="1"/>
+    <xacro:arg name="delta_x"  default="0"/>
+    <xacro:arg name="delta_y"  default="0"/>
 
     <link name="base_link"/>
 
-    <link name="joint">
-        <visual name="revolute_visual">
+    <link name="rev_joint1_body">
+        <visual name="rev_joint1_visual">
             <plugin name="dual_links_robot_visual_plugin" filename="libdual_links_robot_visual_plugin.so">
                 <radius>0.05</radius>
-                <joint_number>1</joint_number>
+                <joint_number>$(arg joint_number)</joint_number>
             </plugin>
             <geometry>
                 <cylinder>
@@ -28,7 +29,7 @@
                 </cylinder>
             </geometry>
         </visual>
-        <collision name="revolute_collision">
+        <collision name="rev_joint1_collision">
             <geometry>
                 <cylinder>
                     <length>${z}</length>
@@ -49,10 +50,14 @@
         </inertial>
     </link>
 
-    <joint name="rev_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+    <joint name="fixing" type="fixed">
+        <parent>world</parent>
+        <child>base_link</child>
+    </joint>
+
+    <joint name="rev_joint1" type="fixed">
         <parent>base_link</parent>
-        <child>joint</child>
+        <child>rev_joint1_body</child>
     </joint>
 
 </model>

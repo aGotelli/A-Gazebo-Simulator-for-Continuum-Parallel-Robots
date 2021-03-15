@@ -43,6 +43,13 @@ target_include_directories(dual_links_robot_physics PRIVATE
                             include ${ZMQ_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS})
 target_link_libraries(dual_links_robot_physics dual_links_robot_shape)
 
+# physics as a Gazebo plugin - math + Gazebo libs
+add_library(dual_links_robot_physics_plugin src/physics_plugin.cpp)
+target_include_directories(dual_links_robot_physics_plugin PRIVATE
+                    include ${ZMQ_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${ZMQ_INCLUDE_DIR})
+target_link_libraries(dual_links_robot_physics_plugin dual_links_robot_physics ${GAZEBO_LIBRARY_DIRS})
+
+
 # physics as an external node
 add_executable(dual_links_robot_physics_node src/physics_node.cpp)
 target_include_directories(dual_links_robot_physics_node PRIVATE

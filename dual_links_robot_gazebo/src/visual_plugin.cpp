@@ -33,7 +33,7 @@ namespace gazebo
 
 void RodVisualPlugin::Load(rendering::VisualPtr parent, sdf::ElementPtr sdf)
 {
-  std::cout << "Loading the visualization of the rod ivp" << std::endl;
+//  std::cout << "Loading the visualization of the rod ivp" << std::endl;
   radius = read(sdf, "radius", 0.1);
   joint_number = read(sdf, "joint_number", -1);
   inv_scale.X(1./parent->Scale().X());
@@ -43,7 +43,7 @@ void RodVisualPlugin::Load(rendering::VisualPtr parent, sdf::ElementPtr sdf)
 
   std::string ip = "ipc://@rod";
   ip = ip + std::to_string(joint_number);
-  std::cout << "Reading from : " << ip << std::endl;
+//  std::cout << "Reading from : " << ip << std::endl;
   shape_listener.defineSock(ip);
 
   visual = parent;
@@ -55,8 +55,7 @@ void RodVisualPlugin::Load(rendering::VisualPtr parent, sdf::ElementPtr sdf)
     lines->AddPoint(Vector3d(0.0, 0.0, 0.0), ignition::math::Color::Blue);
 
 
-  std::cout << "There are : " << lines->GetPointCount() <<"points in the line" <<std::endl;
-  std::cout << "We are using : " << points << "elements." << std::endl;
+  std::cout << "We are using : " << lines->GetPointCount() << " to represent the rod." << std::endl;
   // connect update function
   update_event = event::Events::ConnectPreRender(std::bind(&RodVisualPlugin::Update, this));
 }

@@ -1,5 +1,5 @@
-#ifndef SOFT_BODY_VISUAL_PLUGIN_H
-#define SOFT_BODY_VISUAL_PLUGIN_H
+#ifndef DUAL_LINKS_ROBOT_VISUAL_PLUGIN_H
+#define DUAL_LINKS_ROBOT_VISUAL_PLUGIN_H
 
 #include <gazebo/common/Plugin.hh>
 #include <dual_links_robot_gazebo/shape_listener.h>
@@ -34,4 +34,4 @@ GZ_REGISTER_VISUAL_PLUGIN(RodVisualPlugin)
 }
 
 
-#endif // SOFT_BODY_VISUAL_PLUGIN_
+#endif // DUAL_LINKS_ROBOT_VISUAL_PLUGIN_

@@ -226,10 +226,6 @@ std::vector<double> RodIVPPhysics::update(const Eigen::Vector3d &distal_plate_po
   VectorXd init_guess(14);
   init_guess << th10, n10, m10, th20, n20, m20;
 
-//  std::cout << "p10 : " << p10.transpose() << std::endl;
-//  std::cout << "p20 : " << p20.transpose() << std::endl;
-//  std::cout << "pE : " << pE.transpose() << std::endl;
-
   //Solve with shooting method
   solveLevenbergMarquardt<shootingFunction>(init_guess);
 

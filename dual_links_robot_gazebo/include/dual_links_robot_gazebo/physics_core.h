@@ -1,5 +1,5 @@
-#ifndef SOFT_BODY_PHYSICS_CORE_H
-#define SOFT_BODY_PHYSICS_CORE_H
+#ifndef DUAL_LINKS_ROBOT_PHYSICS_CORE_H
+#define DUAL_LINKS_ROBOT_PHYSICS_CORE_H
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -52,8 +52,10 @@ public:
   }
 
   void initParams(double dt, double fxy, double fz, double mz, double damping, double length, const State &link1_state, const State &link2_state);
+  void initParams(double dt, double fxy, double fz, double mz, double damping, double length, const Eigen::Vector3d& link1_pos, const Eigen::Vector3d& link2_pos);
 
   Wrench update(const State &state);
+  std::vector<double> update(const Eigen::Vector3d &distal_plate_pos);
 
 
 

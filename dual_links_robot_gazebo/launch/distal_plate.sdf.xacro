@@ -10,9 +10,24 @@
     <xacro:property name="y" value=".1"/>
     <xacro:property name="z" value=".1"/>
 
+    <xacro:arg name="enable_physics_plugin" default="true"/>
+    <xacro:arg name="fxy" default="10"/>
+    <xacro:arg name="fz" default="50"/>
+    <xacro:arg name="mz" default="0.1"/>
+    <xacro:arg name="damping" default="0.1"/>
+    <xacro:arg name="length" default="1"/>
 
-
-    <link name="base_link2"/>
+<!-- Model plugin for physics -->
+  <xacro:if value="$(arg enable_physics_plugin)">
+    <plugin name="dual_links_robot_physics_plugin" filename="libdual_links_robot_physics_plugin.so">
+        <fxy>$(arg fxy)</fxy>
+        <fz>$(arg fz)</fz>
+        <mz>$(arg mz)</mz>
+        <damping>$(arg damping)</damping>
+        <length>$(arg length)</length>
+        <attach_point>0 0 0</attach_point>
+    </plugin>
+  </xacro:if>
 
     <link name="distal_plate">
         <visual name="box">
@@ -47,12 +62,6 @@
             </inertia>
         </inertial>
     </link>
-
-    <joint name="root" type="fixed">
-        <origin xyz="0 0 0" rpy="$0 0 0"/>
-        <parent>base_link2</parent>
-        <child>distal_plate</child>
-    </joint>
 
 </model>
 </sdf>
